@@ -3,29 +3,15 @@ import numpy as np
 
 
 class TrackZone:
-    """
-    Railway track ROI + intrusion + tampering logic
-    """
-
     def __init__(self, roi_polygon):
         self.roi = np.array(roi_polygon, dtype=np.int32)
 
-    def point_inside(self, point):
-        return cv2.pointPolygonTest(self.roi, point, False) >= 0
-
     def intrusion_from_box(self, box):
-        """
-        Uses bottom-center of bounding box
-        """
         x1, y1, x2, y2 = box
-        cx = int((x1 + x2) / 2)
-        cy = int(y2)
-        return self.point_inside((cx, cy))
+
+        foot_points = [((x1 + x2) // 2, y2), (x1 + 10, y2), (x2 - 10, y2)]
+
+        return any(cv2.pointPolygonTest(self.roi, p, False) >= 0 for p in foot_points)
 
     def detect_tampering(self, intrusions):
-        """
-        Simple, explainable heuristic:
-        - Multiple objects on track
-        - Persistent obstruction
-        """
         return len(intrusions) >= 2

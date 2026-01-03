@@ -1,18 +1,12 @@
 import time
 from collections import defaultdict
 
-class ThreatMonitor:
-    """
-    Maintains lifecycle state for each tracked object.
-    States: OBSERVED -> THREAT -> CRITICAL -> CLEARED
-    """
 
-    def __init__(self, threat_time=2, critical_time=5, clear_time=3):
-        self.objects = defaultdict(lambda: {
-            "first_seen": None,
-            "last_seen": None,
-            "state": "OBSERVED"
-        })
+class ThreatMonitor:
+    def __init__(self, threat_time=1.5, critical_time=3.5, clear_time=2):
+        self.objects = defaultdict(
+            lambda: {"first_seen": None, "last_seen": None, "state": "OBSERVED"}
+        )
         self.threat_time = threat_time
         self.critical_time = critical_time
         self.clear_time = clear_time
@@ -37,14 +31,7 @@ class ThreatMonitor:
         return obj["state"]
 
     def cleanup(self):
-        """Remove objects no longer visible"""
         now = time.time()
-        cleared = []
-
         for tid, obj in list(self.objects.items()):
             if now - obj["last_seen"] > self.clear_time:
-                cleared.append(tid)
                 del self.objects[tid]
-
-        return cleared
-
