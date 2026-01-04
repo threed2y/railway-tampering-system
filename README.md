@@ -1,6 +1,6 @@
 # 🚄 RailRakshak: Autonomous Railway Surveillance System
 
-> **AI-Powered Threat Detection for Railway Safety | Hackathon 2024**
+> **AI-Powered Threat Detection for Railway Safety | Hackathon 2026**
 
 ## 🚨 The Problem
 Railway safety is compromised by unauthorized track access, vandalism, and wildlife collisions. Traditional manual monitoring is slow and error-prone.
@@ -26,12 +26,11 @@ Railway safety is compromised by unauthorized track access, vandalism, and wildl
 ```bash
 git clone [https://github.com/YOUR_USERNAME/RailRakshak.git](https://github.com/YOUR_USERNAME/RailRakshak.git)
 cd RailRakshak
-
+```
 2. Install Dependencies
-Bash
-
+```bash
 pip install -r requirements.txt
-
+```
 3. Add Missing Assets (Important!)
 
 Due to file size limits, some assets are not on GitHub.
@@ -41,10 +40,9 @@ Due to file size limits, some assets are not on GitHub.
     Step B: Place your test videos in vision_module/data/samples/.
 
 4. Launch the Dashboard
-Bash
-
+```bash
 streamlit run vision_module/app.py
-
+```
 📸 Features
 
     ✅ Multi-Cam Support: Toggle between Track Cam A and B.
@@ -55,6 +53,6 @@ streamlit run vision_module/app.py
 
     ✅ Evidence Locker: All threats are recorded to /recordings.
 
-🏆 Team
+Team RAT
 
-Built with ❤️ by RAT
+Built with ❤️
