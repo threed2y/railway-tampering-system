@@ -39,17 +39,15 @@ RailRakshak is a **smart surveillance node** that can be deployed on CCTVs or Dr
 ```bash
 git clone [https://github.com/YOUR_USERNAME/RailRakshak.git](https://github.com/YOUR_USERNAME/RailRakshak.git)
 cd RailRakshak
-
+```
 2. Install Dependencies
-Bash
-
+```bash
 pip install -r requirements.txt
-
+```
 3. 📥 Download External Assets (CRITICAL)
-
 Due to GitHub's file size limits, the trained AI models and sample footage are hosted externally. 👉 CLICK HERE TO DOWNLOAD ASSETS (Google Drive)
 4. Organize the Files
-
+```bash
 After downloading the assets, ensure your folder looks exactly like this structure:
 Plaintext
 
@@ -59,6 +57,8 @@ railway-tampering-system/
 ├── README.md                 # This file
 │
 ├── track_model.pt            # 🧠 The Custom AI Model (Place here!)
+│
+└── Preview/                  # skip this
 │
 └── vision_module/
     ├── app.py                # 🚀 Main Application Code
@@ -73,12 +73,11 @@ railway-tampering-system/
             └── Test2.mp4     # 📹 Test Video 2
 
     Note: The system uses a "Smart Hunter" algorithm, so as long as track_model.pt and the videos are somewhere in the project folder, the code will find them!
-
+```
 5. Run the System
-Bash
-
+```bash
 streamlit run vision_module/app.py
-
+```
 🧠 How It Works (The Math)
 
     Segmentation: The system predicts a polygon mask for the railway track.
@@ -103,10 +102,12 @@ streamlit run vision_module/app.py
 
 🏆 Team
 
-    Developer: [Your Name]
+    Developer: Ethan Hunt
 
-    Role: AI & Computer Vision Engineer
+    Role: AI & Machine learning
 
-    Event: [Name of Hackathon]
+    Event:
 
-Built with ❤️ in Python
+    Team RAT
+
+Built with sheer will.
