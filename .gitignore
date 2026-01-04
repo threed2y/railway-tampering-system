@@ -1,0 +1,42 @@
+# --- Python & System Garbage ---
+__pycache__/
+*.py[cod]
+*.so
+.DS_Store
+
+# --- Virtual Environment ---
+venv/
+env/
+.env
+.venv/
+
+# --- IDE Settings (VS Code / PyCharm) ---
+.vscode/
+.idea/
+
+# --- 🛑 BIG FILES TO IGNORE ---
+
+# 1. Training Logs & Backups (Massive folders)
+runs/
+results.csv
+
+# 2. Datasets (Don't upload training images)
+vision_module/data/
+datasets/
+
+# 3. Video Recordings & Samples (Too big for GitHub)
+recordings/
+samples/
+*.mp4
+*.avi
+*.mov
+*.mkv
+
+# --- EXCEPTIONS ---
+# (We WANT to keep these specific small assets if they exist)
+!assets/*.mp3
+!vision_module/assets/*.mp3
+
+# Note: GitHub has a 100MB file limit.
+# If 'track_model.pt' is larger than 100MB, you must use Git LFS.
+# Otherwise, it will upload fine.
