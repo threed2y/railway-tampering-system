@@ -53,7 +53,7 @@ Due to file size limits, the AI Models and Data are hosted externally.
 
 | Asset Type | Description | Download Link |
 | --- | --- | --- |
-| **🧠 AI Model** | `track_model.pt` (Custom Binary) | **[Download from Google Drive](https://github.com/threed2y/railway-tampering-system/releases/tag/v1.0)** |
+| **🧠 AI Model** | `track_model.pt` (Custom Binary) | **[Download from Github Releases](https://github.com/threed2y/railway-tampering-system/releases/tag/v1.0)** |
 | **📹 Samples** | Test Videos & Audio Files | **[Download from Google Drive](https://drive.google.com/drive/folders/1tW5DRfj16TILBkI-OCuomfW5hSx5ETj6?usp=drive_link)** |
 | **📊 Dataset** | Training Data (Images/Labels) | **[View on Hugging Face](https://huggingface.co/datasets/sleepysaurus/RailRakshak-Track-Detection-Data)** |
 
@@ -115,5 +115,4 @@ streamlit run vision_module/app.py
 
 *Built with sheer fking will*
 
-```
 
