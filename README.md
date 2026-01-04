@@ -1,9 +1,10 @@
+
 # 🚄 RailRakshak: AI-Powered Autonomous Railway Surveillance
 
 ![Python](https://img.shields.io/badge/Python-3.10%2B-blue)
 ![Streamlit](https://img.shields.io/badge/Streamlit-Dashboard-red)
 ![YOLOv8](https://img.shields.io/badge/AI-YOLOv8-green)
-![OpenCV](https://img.shields.io/badge/Vision-OpenCV-yellow)
+![HuggingFace](https://img.shields.io/badge/Data-HuggingFace-yellow)
 
 > **"Eyes on the Track, Safety on the Rack."**
 > An intelligent, real-time Computer Vision system designed to prevent railway accidents caused by vandalism, unauthorized human access, and wildlife collisions.
@@ -11,20 +12,17 @@
 ---
 
 ## 🚨 The Problem
-Railway safety in India is critical. Manual patrolling is inefficient against:
-1.  **Vandalism:** Miscreants tampering with tracks or placing obstacles.
-2.  **Wildlife Collisions:** Elephants and cattle wandering onto tracks, causing derailments and loss of life.
-3.  **Human Encroachment:** Unauthorized walking on tracks in blind spots.
+Railway safety is compromised by unauthorized track access, vandalism, and wildlife collisions. Traditional manual monitoring is slow and error-prone.
 
 ## 💡 The Solution: RailRakshak
-RailRakshak is a **smart surveillance node** that can be deployed on CCTVs or Drones. It acts as a "Third Eye" for the pilot/station master.
+**RailRakshak** is a smart surveillance node deployed on CCTVs or Drones. It acts as a "Third Eye" for the pilot/station master.
 
 ### Key Capabilities:
-* **🟢 Dynamic Track Segmentation:** Uses a custom trained **YOLOv8-Seg** model to understand exactly where the "Safe Zone" (Track) is.
+* **🟢 Dynamic Track Segmentation:** Uses a custom trained **YOLOv8-Seg** model to identify the "Safe Zone."
 * **🐘 Multi-Class Threat Detection:** Identifies Humans (Vandalism), Elephants, Bears, and Cattle.
-* **📐 Geometric Danger Logic:** It doesn't just "see" objects; it calculates if they are **physically intersecting** with the track's danger zone (with a safety buffer).
-* **🔊 Instant Alerts:** Triggers visual alarms and audio warnings (Siren/Voice) immediately.
-* **📹 Black Box Recording:** Automatically starts recording video evidence the moment a threat is detected.
+* **📐 Geometric Danger Logic:** Calculates if objects are **physically intersecting** the track's danger zone (Buffer +30px).
+* **🔊 Instant Alerts:** Triggers visual alarms and audio warnings (Siren/Voice) via Base64 injection.
+* **📹 Black Box Recording:** Automatically saves video clips of incidents to `/recordings`.
 
 ---
 
@@ -39,75 +37,83 @@ RailRakshak is a **smart surveillance node** that can be deployed on CCTVs or Dr
 ```bash
 git clone [https://github.com/YOUR_USERNAME/RailRakshak.git](https://github.com/YOUR_USERNAME/RailRakshak.git)
 cd RailRakshak
+
 ```
-2. Install Dependencies
+
+### 2. Install Dependencies
+
 ```bash
 pip install -r requirements.txt
-```
-3. 📥 Download External Assets (CRITICAL)
-Due to GitHub's file size limits, the trained AI models and sample footage are hosted externally. 👉 CLICK HERE TO DOWNLOAD ASSETS (Google Drive)
-4. Organize the Files
-```bash
-After downloading the assets, ensure your folder looks exactly like this structure:
-Plaintext
 
+```
+
+### 3. 📥 Download Assets (CRITICAL)
+
+Due to file size limits, the AI Models and Data are hosted externally.
+
+| Asset Type | Description | Download Link |
+| --- | --- | --- |
+| **🧠 AI Model** | `track_model.pt` (Custom Binary) | **[Download from Google Drive](https://github.com/threed2y/railway-tampering-system/releases/tag/v1.0)** |
+| **📹 Samples** | Test Videos & Audio Files | **[Download from Google Drive](https://drive.google.com/drive/folders/1tW5DRfj16TILBkI-OCuomfW5hSx5ETj6?usp=drive_link)** |
+| **📊 Dataset** | Training Data (Images/Labels) | **[View on Hugging Face](https://huggingface.co/datasets/sleepysaurus/RailRakshak-Track-Detection-Data)** |
+
+### 4. Organize Files
+
+Place the downloaded files as shown below.
+*(Note: The system uses a recursive search, so as long as files are inside the project, it will work!)*
+
+```text
 railway-tampering-system/
 │
-├── requirements.txt          # Dependencies
-├── README.md                 # This file
-│
-├── track_model.pt            # 🧠 The Custom AI Model (Place here!)
-│
-└── Preview/                  # skip this
+├── track_model.pt            <-- 🚨 PASTE MODEL HERE
+├── requirements.txt
+├── README.md
 │
 └── vision_module/
-    ├── app.py                # 🚀 Main Application Code
+    ├── app.py                # Main Application
     │
     ├── assets/
-    │   ├── danger.mp3        # 🔊 Alarm Sound
-    │   └── warning.mp3       # 🔊 Warning Sound
+    │   ├── danger.mp3        # 🚨 PASTE AUDIO HERE
+    │   └── warning.mp3
     │
     └── data/
         └── samples/
-            ├── test.mp4      # 📹 Test Video 1
-            └── Test2.mp4     # 📹 Test Video 2
+            ├── test.mp4      # 🚨 PASTE VIDEOS HERE
+            └── Test2.mp4
 
-    Note: The system uses a "Smart Hunter" algorithm, so as long as track_model.pt and the videos are somewhere in the project folder, the code will find them!
 ```
-5. Run the System
+
+### 5. Launch the Dashboard
+
 ```bash
 streamlit run vision_module/app.py
+
 ```
-🧠 How It Works (The Math)
 
-    Segmentation: The system predicts a polygon mask for the railway track.
+---
 
-    Buffering: We apply a Buffer(+30px) to this polygon to create a "Danger Zone" that extends slightly beyond the rails.
+## 🧠 How It Works (The Math)
 
-    Intersection over Union (IoU):
+1. **Segmentation:** The system predicts a polygon mask for the railway track.
+2. **Buffering:** We apply a `Buffer(+30px)` to this polygon to create a "Danger Zone."
+3. **Intersection over Union (IoU):**
+* **Humans (Class 0):** Trigger ALERT at **1% overlap** (High sensitivity for vandalism).
+* **Elephants/Animals:** Trigger ALERT at **10% overlap**.
 
-        If a Human (Class 0) overlaps the Danger Zone by just 1%, it triggers a CRITICAL ALERT (High sensitivity for vandalism).
 
-        If an Elephant (Class 20) overlaps by 10%, it triggers.
+4. **Feedback Loop:** If status is "DANGER", the system locks the frame, writes it to disk, and plays the audio alert.
 
-    Feedback Loop: If the status is "DANGER", the system locks the frame, writes it to the disk (/recordings), and plays the audio alert via Base64 injection.
+---
 
-🔮 Future Roadmap
+## 🏆 Team
 
-    GPS Integration: To send the exact coordinates of the threat to the nearest station.
+* **Developer:** Ethan Hunt
+* **Role:** AI & Machine Learning
+* **Team:** RAT
 
-    Night Vision: Training the model on IR (Infrared) footage for 24/7 operation.
+---
 
-    Speed Estimation: Calculating the time-to-collision for approaching trains.
+*Built with sheer fking will*
 
-🏆 Team
+```
 
-    Developer: Ethan Hunt
-
-    Role: AI & Machine learning
-
-    Event:
-
-    Team RAT
-
-Built with sheer will.
