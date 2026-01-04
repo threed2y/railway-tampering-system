@@ -1,58 +1,112 @@
-# 🚄 RailRakshak: Autonomous Railway Surveillance System
+# 🚄 RailRakshak: AI-Powered Autonomous Railway Surveillance
 
-> **AI-Powered Threat Detection for Railway Safety | Hackathon 2026**
+![Python](https://img.shields.io/badge/Python-3.10%2B-blue)
+![Streamlit](https://img.shields.io/badge/Streamlit-Dashboard-red)
+![YOLOv8](https://img.shields.io/badge/AI-YOLOv8-green)
+![OpenCV](https://img.shields.io/badge/Vision-OpenCV-yellow)
 
-## 🚨 The Problem
-Railway safety is compromised by unauthorized track access, vandalism, and wildlife collisions. Traditional manual monitoring is slow and error-prone.
-
-## 💡 The Solution
-**RailRakshak** is a real-time Computer Vision system that uses **Drone/CCTV footage** to:
-1.  **Segment Tracks:** Automatically detects the railway track (Green Zone) using a custom YOLOv8-Seg model.
-2.  **Detect Threats:** Identifies Humans, Elephants, and Cattle.
-3.  **Calculate Danger:** Uses geometric logic to trigger alerts ONLY if the object is physically ON or dangerously CLOSE to the tracks.
-4.  **Auto-Record:** Automatically saves video clips of incidents for legal evidence.
+> **"Eyes on the Track, Safety on the Rack."**
+> An intelligent, real-time Computer Vision system designed to prevent railway accidents caused by vandalism, unauthorized human access, and wildlife collisions.
 
 ---
 
-## 🛠️ Tech Stack
-* **AI Models:** YOLOv8-Seg (Custom Trained), YOLOv8m (Object Detection)
-* **Logic:** Shapely (Geometric Intersection)
-* **Interface:** Streamlit (Real-time Dashboard)
-* **Language:** Python 3.10+
+## 🚨 The Problem
+Railway safety in India is critical. Manual patrolling is inefficient against:
+1.  **Vandalism:** Miscreants tampering with tracks or placing obstacles.
+2.  **Wildlife Collisions:** Elephants and cattle wandering onto tracks, causing derailments and loss of life.
+3.  **Human Encroachment:** Unauthorized walking on tracks in blind spots.
 
-## 🚀 How to Run Locally
+## 💡 The Solution: RailRakshak
+RailRakshak is a **smart surveillance node** that can be deployed on CCTVs or Drones. It acts as a "Third Eye" for the pilot/station master.
+
+### Key Capabilities:
+* **🟢 Dynamic Track Segmentation:** Uses a custom trained **YOLOv8-Seg** model to understand exactly where the "Safe Zone" (Track) is.
+* **🐘 Multi-Class Threat Detection:** Identifies Humans (Vandalism), Elephants, Bears, and Cattle.
+* **📐 Geometric Danger Logic:** It doesn't just "see" objects; it calculates if they are **physically intersecting** with the track's danger zone (with a safety buffer).
+* **🔊 Instant Alerts:** Triggers visual alarms and audio warnings (Siren/Voice) immediately.
+* **📹 Black Box Recording:** Automatically starts recording video evidence the moment a threat is detected.
+
+---
+
+## 🎥 Demo
+![RailRakshak Demo](preview/demo_preview.png)
+
+---
+
+## 🛠️ Installation & Setup
 
 ### 1. Clone the Repository
 ```bash
 git clone [https://github.com/YOUR_USERNAME/RailRakshak.git](https://github.com/YOUR_USERNAME/RailRakshak.git)
 cd RailRakshak
-```
+
 2. Install Dependencies
-```bash
+Bash
+
 pip install -r requirements.txt
-```
-3. Add Missing Assets (Important!)
 
-Due to file size limits, some assets are not on GitHub.
+3. 📥 Download External Assets (CRITICAL)
 
-    Step A: Ensure track_model.pt is in the vision_module/ folder.
+Due to GitHub's file size limits, the trained AI models and sample footage are hosted externally. 👉 CLICK HERE TO DOWNLOAD ASSETS (Google Drive)
+4. Organize the Files
 
-    Step B: Place your test videos in vision_module/data/samples/.
+After downloading the assets, ensure your folder looks exactly like this structure:
+Plaintext
 
-4. Launch the Dashboard
-```bash
+railway-tampering-system/
+│
+├── requirements.txt          # Dependencies
+├── README.md                 # This file
+│
+├── track_model.pt            # 🧠 The Custom AI Model (Place here!)
+│
+└── vision_module/
+    ├── app.py                # 🚀 Main Application Code
+    │
+    ├── assets/
+    │   ├── danger.mp3        # 🔊 Alarm Sound
+    │   └── warning.mp3       # 🔊 Warning Sound
+    │
+    └── data/
+        └── samples/
+            ├── test.mp4      # 📹 Test Video 1
+            └── Test2.mp4     # 📹 Test Video 2
+
+    Note: The system uses a "Smart Hunter" algorithm, so as long as track_model.pt and the videos are somewhere in the project folder, the code will find them!
+
+5. Run the System
+Bash
+
 streamlit run vision_module/app.py
-```
-📸 Features
 
-    ✅ Multi-Cam Support: Toggle between Track Cam A and B.
+🧠 How It Works (The Math)
 
-    ✅ Smart Sensitivity: High sensitivity for Humans (Vandalism), optimized for Large animals.
+    Segmentation: The system predicts a polygon mask for the railway track.
 
-    ✅ Silent Alarm: Visual and Audio alerts for the operator.
+    Buffering: We apply a Buffer(+30px) to this polygon to create a "Danger Zone" that extends slightly beyond the rails.
 
-    ✅ Evidence Locker: All threats are recorded to /recordings.
+    Intersection over Union (IoU):
 
-Team RAT
+        If a Human (Class 0) overlaps the Danger Zone by just 1%, it triggers a CRITICAL ALERT (High sensitivity for vandalism).
 
-Built with ❤️
+        If an Elephant (Class 20) overlaps by 10%, it triggers.
+
+    Feedback Loop: If the status is "DANGER", the system locks the frame, writes it to the disk (/recordings), and plays the audio alert via Base64 injection.
+
+🔮 Future Roadmap
+
+    GPS Integration: To send the exact coordinates of the threat to the nearest station.
+
+    Night Vision: Training the model on IR (Infrared) footage for 24/7 operation.
+
+    Speed Estimation: Calculating the time-to-collision for approaching trains.
+
+🏆 Team
+
+    Developer: [Your Name]
+
+    Role: AI & Computer Vision Engineer
+
+    Event: [Name of Hackathon]
+
+Built with ❤️ in Python
