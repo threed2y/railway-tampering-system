@@ -35,3 +35,4 @@ class ThreatMonitor:
         for tid, obj in list(self.objects.items()):
             if now - obj["last_seen"] > self.clear_time:
                 del self.objects[tid]
+
